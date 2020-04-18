@@ -83,6 +83,7 @@ class Login extends React.Component {
           onChangeText={(text) => {
             this.handlePassword(text);
           }}
+          secureTextEntry={true}
         />
         <View
           style={{

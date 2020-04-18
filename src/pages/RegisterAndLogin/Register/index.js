@@ -88,6 +88,7 @@ class Register extends React.Component {
           onChangeText={(text) => {
             this.handlePassword(text);
           }}
+          secureTextEntry={true}
         />
         <TouchableOpacity
           onPress={() => {

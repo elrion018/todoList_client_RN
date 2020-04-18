@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, TouchableOpacity, TouchableHighlight, Text} from 'react-native';
+import {View, TouchableOpacity, BackHandler, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import {FlatList} from 'react-native-gesture-handler';
@@ -329,10 +329,19 @@ class TodoBox extends React.Component {
     }
   };
 
+  handleBackButton = () => {
+    return true;
+  };
+
   componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
     this._getTodoList();
     this._getProjectList();
     this._getSubTodoList();
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
   }
 
   render() {
