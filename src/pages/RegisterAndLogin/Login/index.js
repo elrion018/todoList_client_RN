@@ -7,8 +7,10 @@ import {
   Dimensions,
 } from 'react-native';
 import axios from 'axios';
+import {connect} from 'react-redux';
 
 import {URL_POST_LOGIN_ID} from '../../../globals/api';
+import * as actions from '../../../actions/user';
 
 class Login extends React.Component {
   constructor() {
@@ -30,6 +32,7 @@ class Login extends React.Component {
       formData.append('password', this.state.password);
       const res = await axios.post(URL_POST_LOGIN_ID, formData, config);
       if (res.status === 200) {
+        this.props.tokenUpdate(res.data['token']);
         this.props.navigation.navigate('Drawer');
       }
     } catch (error) {
@@ -109,4 +112,18 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+const mapStateToProps = (state) => {
+  return {
+    user: state.user,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    tokenUpdate: (token) => {
+      dispatch(actions.TokenUpdate(token));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
