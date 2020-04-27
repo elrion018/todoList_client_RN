@@ -47,7 +47,7 @@ function MyMain() {
 
 function MyDrawer() {
   return (
-    <Drawer.Navigator initialRouteName="TodoBox">
+    <Drawer.Navigator initialRouteName="Projects">
       <Drawer.Screen
         name="TodoBox"
         component={TodoBoxFuc}

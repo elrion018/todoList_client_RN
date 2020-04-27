@@ -5,13 +5,13 @@ import {FlatList} from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
 import * as actions from '../../../actions/appStatus';
 import {
-  URL_GET_TODO_LIST,
-  URL_GET_PROJECT_LIST,
   URL_POST_TODO_LIST,
   URL_PUT_TODO_DETAIL,
-  URL_GET_SUBTODO_LIST,
   URL_POST_SUBTODO_LIST,
   URL_PUT_SUBTODO_DETAIL,
+  URL_POST_PROJECT_LIST_EMAIL,
+  URL_POST_TODO_LIST_EMAIL,
+  URL_POST_SUBTODO_LIST_EMAIL,
 } from '../../../globals/api';
 import {
   NewWriteToDoModal,
@@ -109,9 +109,11 @@ class ToDay extends React.Component {
   _getTodoListForToDay = async () => {
     try {
       const config = {
-        headers: {},
+        headers: {
+          Authorization: this.props.token,
+        },
       };
-      const res = await axios.get(URL_GET_TODO_LIST, config);
+      const res = await axios.post(URL_POST_TODO_LIST_EMAIL, {}, config);
 
       if (res.status === 200) {
         const temp =
@@ -129,14 +131,14 @@ class ToDay extends React.Component {
   _getProjectList = async () => {
     try {
       const config = {
-        headers: {},
+        headers: {
+          Authorization: this.props.token,
+        },
       };
-      const res = await axios.get(URL_GET_PROJECT_LIST, config);
+      const res = await axios.post(URL_POST_PROJECT_LIST_EMAIL, {}, config);
 
       if (res.status === 200) {
-        this.setState({
-          projectData: res.data,
-        });
+        this.props.projectUpdate(res.data);
       }
     } catch (error) {
       console.log(error);
@@ -147,10 +149,11 @@ class ToDay extends React.Component {
   _getSubTodoList = async () => {
     try {
       const config = {
-        headers: {},
+        headers: {
+          Authorization: this.props.token,
+        },
       };
-      const res = await axios.get(URL_GET_SUBTODO_LIST, config);
-
+      const res = await axios.post(URL_POST_SUBTODO_LIST_EMAIL, {}, config);
       if (res.status === 200 && res.data.length !== 0) {
         this.props.subtodoUpdate(res.data);
       }
@@ -671,11 +674,15 @@ class ToDay extends React.Component {
 const mapStateToProps = (state) => {
   return {
     appStatus: state.appStatus,
+    token: state.user.token,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    projectUpdate: (project) => {
+      dispatch(actions.ProjectUpdate(project));
+    },
     todoUpdate: (todo) => {
       dispatch(actions.TodoUpdate(todo));
     },
