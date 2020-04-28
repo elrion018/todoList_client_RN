@@ -108,7 +108,9 @@ class Projects extends React.Component {
   _makeNewProject = async (projectValue) => {
     try {
       const config = {
-        headers: {},
+        headers: {
+          Authorization: this.props.token,
+        },
       };
       const formData = new FormData();
       formData.append('project_text', projectValue.project_text);
@@ -128,7 +130,9 @@ class Projects extends React.Component {
   _editProjectDetail = async (projectValue, slug) => {
     try {
       const config = {
-        headers: {},
+        headers: {
+          Authorization: this.props.token,
+        },
       };
 
       const formData = new FormData();
@@ -150,7 +154,9 @@ class Projects extends React.Component {
   _deleteProjectDetail = async (slug) => {
     try {
       const config = {
-        headers: {},
+        headers: {
+          Authorization: this.props.token,
+        },
       };
 
       const res = await axios.delete(URL_PUT_PROJECT_LIST(slug), config);

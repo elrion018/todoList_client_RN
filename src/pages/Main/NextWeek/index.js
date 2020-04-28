@@ -169,7 +169,9 @@ class NextWeek extends React.Component {
   _makeNewTodo = async (todoValue, projectValue) => {
     try {
       const config = {
-        headers: {},
+        headers: {
+          Authorization: this.props.token,
+        },
       };
       const formData = new FormData();
       formData.append('todo_text', todoValue.todo_text);
@@ -199,7 +201,9 @@ class NextWeek extends React.Component {
   _makeNewSubTodo = async (subtodoValue, slug) => {
     try {
       const config = {
-        headers: {},
+        headers: {
+          Authorization: this.props.token,
+        },
       };
 
       const formData = new FormData();
@@ -230,7 +234,9 @@ class NextWeek extends React.Component {
   _editTodoDetail = async (todoValue, slug) => {
     try {
       const config = {
-        headers: {},
+        headers: {
+          Authorization: this.props.token,
+        },
       };
 
       const formData = new FormData();
@@ -253,7 +259,9 @@ class NextWeek extends React.Component {
   _doneForTodo = async (todoValue, slug) => {
     try {
       const config = {
-        headers: {},
+        headers: {
+          Authorization: this.props.token,
+        },
       };
 
       const formData = new FormData();
@@ -279,7 +287,9 @@ class NextWeek extends React.Component {
   _editSubTodoDetail = async (subTodoValue, slug) => {
     try {
       const config = {
-        headers: {},
+        headers: {
+          Authorization: this.props.token,
+        },
       };
 
       const formData = new FormData();
@@ -306,7 +316,9 @@ class NextWeek extends React.Component {
   _doneForSubTodo = async (subTodoValue, slug) => {
     try {
       const config = {
-        headers: {},
+        headers: {
+          Authorization: this.props.token,
+        },
       };
 
       const formData = new FormData();

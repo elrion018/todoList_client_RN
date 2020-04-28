@@ -14,6 +14,10 @@ export const URL_POST_REGISTER_ID = `${ADDRESS}/sign/signup`; // 회원가입
 
 export const URL_POST_LOGIN_ID = `${ADDRESS}/sign/signin`;
 
+//check token
+
+export const URL_POST_CHECK_TOKEN = `${ADDRESS}/sign/token-check`;
+
 //project
 
 export const URL_GET_PROJECT_LIST = `${ADDRESS}/todo/project`; // project list 가져오기

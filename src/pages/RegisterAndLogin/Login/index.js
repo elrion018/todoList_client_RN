@@ -9,7 +9,7 @@ import {
 import axios from 'axios';
 import {connect} from 'react-redux';
 
-import {URL_POST_LOGIN_ID} from '../../../globals/api';
+import {URL_POST_LOGIN_ID, URL_POST_CHECK_TOKEN} from '../../../globals/api';
 import * as actions from '../../../actions/user';
 
 class Login extends React.Component {
@@ -21,6 +21,30 @@ class Login extends React.Component {
       password: '',
     };
   }
+
+  componentDidMount() {
+    this._tokenCheck();
+  }
+
+  _tokenCheck = async () => {
+    try {
+      if (this.props.user.token.length !== 0) {
+        const config = {
+          headers: {
+            Authorization: this.props.user.token,
+          },
+        };
+
+        const res = await axios.post(URL_POST_CHECK_TOKEN, {}, config);
+        if (res.status === 200) {
+          this.props.navigation.navigate('Drawer');
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      console.error(error);
+    }
+  };
 
   _login = async () => {
     try {
