@@ -11,7 +11,9 @@ import {
 import {connect} from 'react-redux';
 import axios from 'axios';
 import * as actions from '../../../actions/appStatus';
+import * as actions2 from '../../../actions/user';
 import {NewWriteProjectModal, ProjectEditModal} from '../../../modals';
+import {ScrollView} from 'react-native-gesture-handler';
 class Projects extends React.Component {
   constructor() {
     super();
@@ -42,7 +44,7 @@ class Projects extends React.Component {
         this.props.projectUpdate(res.data);
       }
     } catch (error) {
-      console.log(error);
+      console.dir(error);
       console.error(error);
     }
   };
@@ -57,6 +59,7 @@ class Projects extends React.Component {
       const res = await axios.post(URL_POST_TODO_LIST_EMAIL, {}, config);
 
       if (res.status === 200) {
+        console.log('200');
         const temp =
           res.data.length !== 0
             ? res.data.filter((item) => item.done === false)
@@ -64,7 +67,7 @@ class Projects extends React.Component {
         this.props.todoUpdate(temp);
       }
     } catch (error) {
-      console.log(error);
+      console.dir(error);
       console.error(error);
     }
   };
@@ -172,10 +175,46 @@ class Projects extends React.Component {
     }
   };
 
+  _logOut = () => {
+    this.props.tokenUpdate('');
+    this.props.navigation.navigate('Login');
+  };
+
+  _makeFlatListForProjects = () => {
+    if (this.props.appStatus.project !== 0) {
+      return this.props.appStatus.project.map((item) => {
+        return (
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <TouchableOpacity
+              style={{
+                borderBottomWidth: 1,
+                borderBottomColor: 'grey',
+                height: 50,
+                justifyContent: 'center',
+                width: Dimensions.get('window').width,
+              }}
+              onPress={() => {
+                this._setProjectEditModal(true, item);
+              }}>
+              <Text
+                style={{
+                  color: 'black',
+                  marginLeft: 15,
+                  fontWeight: 'bold',
+                }}>
+                {item.project_text}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        );
+      });
+    }
+  };
+
   componentDidMount() {
-    this._getTodoList();
+    // this._getTodoList();
     this._getProjectList();
-    this._getSubTodoList();
+    // this._getSubTodoList();
   }
 
   render() {
@@ -211,38 +250,21 @@ class Projects extends React.Component {
             }}>
             <Icon name="plus" size={20} />
           </TouchableOpacity>
-        </View>
-        <View style={{flex: 1}}>
-          <FlatList
-            data={this.props.appStatus.project}
-            renderItem={({item}) => {
-              return (
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <TouchableOpacity
-                    style={{
-                      borderBottomWidth: 1,
-                      borderBottomColor: 'grey',
-                      height: 50,
-                      justifyContent: 'center',
-                      width: Dimensions.get('window').width,
-                    }}
-                    onPress={() => {
-                      this._setProjectEditModal(true, item);
-                    }}>
-                    <Text
-                      style={{
-                        color: 'black',
-                        marginLeft: 15,
-                        fontWeight: 'bold',
-                      }}>
-                      {item.project_text}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              );
+          <TouchableOpacity
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginRight: 20,
             }}
-          />
+            onPress={() => {
+              this._logOut();
+            }}>
+            <Icon name="close" size={20} />
+          </TouchableOpacity>
         </View>
+        <ScrollView style={{flex: 1}}>
+          {this._makeFlatListForProjects()}
+        </ScrollView>
         <NewWriteProjectModal
           setModalProp={this._setNewWriteProjectModal}
           animationType={'none'}
@@ -273,6 +295,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    tokenUpdate: (token) => {
+      dispatch(actions2.TokenUpdate(token));
+    },
+
     projectUpdate: (project) => {
       dispatch(actions.ProjectUpdate(project));
     },

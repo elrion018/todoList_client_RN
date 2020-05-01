@@ -5,11 +5,10 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {FlatList} from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
 import * as actions from '../../../actions/appStatus';
+import * as actions2 from '../../../actions/user';
 import {
-  URL_GET_TODO_LIST,
   URL_POST_TODO_LIST,
   URL_PUT_TODO_DETAIL,
-  URL_GET_SUBTODO_LIST,
   URL_POST_SUBTODO_LIST,
   URL_PUT_SUBTODO_DETAIL,
   URL_POST_PROJECT_LIST_EMAIL,
@@ -349,11 +348,16 @@ class TodoBox extends React.Component {
     return true;
   };
 
+  _logOut = () => {
+    this.props.tokenUpdate('');
+    this.props.navigation.navigate('Login');
+  };
+
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
     this._getTodoList();
-    this._getProjectList();
-    this._getSubTodoList();
+    // this._getProjectList();
+    // this._getSubTodoList();
   }
 
   componentWillUnmount() {
@@ -381,6 +385,18 @@ class TodoBox extends React.Component {
           <View style={{marginLeft: 40}}>
             <Text style={{color: 'white'}}>관리함</Text>
           </View>
+          <View style={{flex: 1}}></View>
+          <TouchableOpacity
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginRight: 20,
+            }}
+            onPress={() => {
+              this._logOut();
+            }}>
+            <Icon name="close" size={20} />
+          </TouchableOpacity>
         </View>
         <View style={{flex: 1}}>
           <FlatList
@@ -553,6 +569,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    tokenUpdate: (token) => {
+      dispatch(actions2.TokenUpdate(token));
+    },
     projectUpdate: (project) => {
       dispatch(actions.ProjectUpdate(project));
     },

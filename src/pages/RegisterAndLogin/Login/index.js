@@ -11,6 +11,7 @@ import {connect} from 'react-redux';
 
 import {URL_POST_LOGIN_ID, URL_POST_CHECK_TOKEN} from '../../../globals/api';
 import * as actions from '../../../actions/user';
+import messaging from '@react-native-firebase/messaging';
 
 class Login extends React.Component {
   constructor() {
@@ -24,6 +25,15 @@ class Login extends React.Component {
 
   componentDidMount() {
     this._tokenCheck();
+    messaging().registerForRemoteNotifications();
+    messaging().onMessage(async (remoteMessage) => {
+      try {
+        alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+      } catch (error) {
+        console.log(error);
+        console.error(error);
+      }
+    });
   }
 
   _tokenCheck = async () => {
@@ -54,6 +64,7 @@ class Login extends React.Component {
       const formData = new FormData();
       formData.append('email', this.state.email);
       formData.append('password', this.state.password);
+
       const res = await axios.post(URL_POST_LOGIN_ID, formData, config);
       if (res.status === 200) {
         this.props.tokenUpdate(res.data['token']);

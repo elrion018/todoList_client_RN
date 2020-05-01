@@ -9,6 +9,7 @@ import {
 
 import {URL_POST_REGISTER_ID} from '../../../globals/api';
 import axios from 'axios';
+import messaging from '@react-native-firebase/messaging';
 
 class Register extends React.Component {
   constructor() {
@@ -17,7 +18,19 @@ class Register extends React.Component {
     this.state = {
       email: '',
       password: '',
+      push_token: '',
     };
+  }
+
+  componentDidMount() {
+    messaging()
+      .getToken()
+      .then((token) => {
+        this.setState({
+          push_token: token,
+        });
+        return;
+      });
   }
 
   _register = async () => {
@@ -28,6 +41,7 @@ class Register extends React.Component {
       const formData = new FormData();
       formData.append('email', this.state.email);
       formData.append('password', this.state.password);
+      formData.append('push_token', this.state.push_token);
       const res = await axios.post(URL_POST_REGISTER_ID, formData, config);
       if (res.status === 201) {
         alert('이미 회원가입하셨습니다.');

@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {FlatList} from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
 import * as actions from '../../../actions/appStatus';
+import * as actions2 from '../../../actions/user';
 import {
   URL_POST_TODO_LIST,
   URL_PUT_TODO_DETAIL,
@@ -344,10 +345,15 @@ class ToDay extends React.Component {
     }
   };
 
+  _logOut = () => {
+    this.props.tokenUpdate('');
+    this.props.navigation.navigate('Login');
+  };
+
   componentDidMount() {
     this._getTodoListForToDay();
-    this._getProjectList();
-    this._getSubTodoList();
+    // this._getProjectList();
+    // this._getSubTodoList();
   }
 
   render() {
@@ -405,6 +411,18 @@ class ToDay extends React.Component {
           <View style={{marginLeft: 40}}>
             <Text style={{color: 'white'}}>오늘</Text>
           </View>
+          <View style={{flex: 1}}></View>
+          <TouchableOpacity
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginRight: 20,
+            }}
+            onPress={() => {
+              this._logOut();
+            }}>
+            <Icon name="close" size={20} />
+          </TouchableOpacity>
         </View>
         <ScrollView>
           <View
@@ -692,6 +710,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    tokenUpdate: (token) => {
+      dispatch(actions2.TokenUpdate(token));
+    },
     projectUpdate: (project) => {
       dispatch(actions.ProjectUpdate(project));
     },
